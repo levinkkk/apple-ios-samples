@@ -115,7 +115,7 @@ void CloudKitErrorLog(int lineNumber, NSString *functionName, NSError *error)
 // This will allow you to bundle your query results into chunks, avoiding very long query times.
 // In our case we limit to 10 at a time, and keep refetching more if available.
 //
-#define kResultsLimit 20
+#define kResultsLimit 10
 
 - (void)fetchRecordsWithType:(NSString *)recordType completionHandler:(void (^)(NSArray *records, NSError *error))completionHandler
 {
@@ -344,6 +344,7 @@ void CloudKitErrorLog(int lineNumber, NSString *functionName, NSError *error)
 
 - (BOOL)isMyRecord:(CKRecordID *)recordID;
 {
+    NSLog(@"CKOwnerDefaultName=%@",CKOwnerDefaultName);
     return [recordID.recordName isEqual:CKOwnerDefaultName];
 }
 
@@ -889,9 +890,15 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
 {
     // find all discoverable users in the device's address book
     //
+    
     CKDiscoverAllContactsOperation *op = [[CKDiscoverAllContactsOperation alloc] init];
     op.queuePriority = NSOperationQueuePriorityNormal;
-    
+//    op.discoverAllUserIdentitiesCompletionBlock = ^(NSError * _Nullable operationError) {
+//        
+//    };
+//    op.userIdentityDiscoveredBlock = ^(CKUserIdentity * _Nonnull identity) {
+//        
+//    };
     [op setDiscoverAllContactsCompletionBlock:^(NSArray *userInfos, NSError *error) {
         
         CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
@@ -969,24 +976,40 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
         
         if (recordIDToUse != nil)
         {
-            CKDiscoverUserInfosOperation *discoverOperation = [[CKDiscoverUserInfosOperation alloc] init];
-            discoverOperation.userRecordIDs = @[recordIDToUse];
+            CKDiscoverUserIdentitiesOperation *discoverOperation = [[CKDiscoverUserIdentitiesOperation alloc] init];
+            discoverOperation.userIdentityLookupInfos=[CKUserIdentityLookupInfo lookupInfosWithRecordIDs:@[recordIDToUse]];
             
-            discoverOperation.discoverUserInfosCompletionBlock = ^(NSDictionary *emailsToUserInfos, NSDictionary *userRecordIDsToUserInfos, NSError *operationError) {
+//            discoverOperation.userRecordIDs = @[recordIDToUse];
+            discoverOperation.discoverUserIdentitiesCompletionBlock = ^(NSError * _Nullable operationError) {
                 
                 CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
-                
-                // the dictionary has a key as CKRecordID which gives us back a CKDiscoveredUserInfo
-                CKDiscoveredUserInfo *userInfo = userRecordIDsToUserInfos[recordIDToUse];
+            };
+            discoverOperation.userIdentityDiscoveredBlock = ^(CKUserIdentity * _Nonnull identity, CKUserIdentityLookupInfo * _Nonnull lookupInfo) {
+                CKUserIdentity *userInfo =identity;// userRecordIDsToUserInfos[recordIDToUse];
                 if (userInfo != nil)
                 {
                     // back on the main queue, call our completion handler
                     dispatch_async(dispatch_get_main_queue(), ^(void) {
                         // invoke our caller's completion handler indicating we are done
-                        completionHandler(userInfo.firstName, userInfo.lastName);
+                        completionHandler(userInfo.nameComponents.givenName,userInfo.nameComponents.familyName);
                     });
                 }
             };
+//            discoverOperation.discoverUserInfosCompletionBlock = ^(NSDictionary *emailsToUserInfos, NSDictionary *userRecordIDsToUserInfos, NSError *operationError) {
+//
+//                CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
+//
+//                // the dictionary has a key as CKRecordID which gives us back a CKDiscoveredUserInfo
+//                CKDiscoveredUserInfo *userInfo = userRecordIDsToUserInfos[recordIDToUse];
+//                if (userInfo != nil)
+//                {
+//                    // back on the main queue, call our completion handler
+//                    dispatch_async(dispatch_get_main_queue(), ^(void) {
+//                        // invoke our caller's completion handler indicating we are done
+//                        completionHandler(userInfo.displayContact.givenName,userInfo.displayContact.familyName);
+//                    });
+//                }
+//            };
             [self.container addOperation:discoverOperation];
         }
         else

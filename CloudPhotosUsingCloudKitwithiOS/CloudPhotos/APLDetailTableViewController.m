@@ -10,7 +10,7 @@
 #import "APLMainTableViewController.h"
 #import "APLMapViewController.h"
 #import "APLPhotoViewController.h"
-
+#import <Photos/Photos.h>
 #import "APLCloudManager.h"
 #import "APLAppDelegate.h"
 
@@ -436,7 +436,7 @@ static const CGSize kImageSize = {512, 512};    // the size we want for the stor
     if (originalImage != nil)
     {
         self.imageView.image = originalImage;
-        
+        /*
         // handle the ALAsset that's returned
         ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *myasset)
         {
@@ -466,8 +466,24 @@ static const CGSize kImageSize = {512, 512};    // the size we want for the stor
         [assetslibrary assetForURL:url
                        resultBlock:resultblock
                       failureBlock:failureblock];
+         
+         */
     }
+    NSURL *imageUrl = [info valueForKey:UIImagePickerControllerReferenceURL];
+    PHFetchResult *fetchResult = [PHAsset fetchAssetsWithALAssetURLs:@[imageUrl] options:nil];
+    PHAsset *asset = fetchResult.firstObject;
     
+    // obtain the creation date property from the asset
+        _photoDate =asset.creationDate;// [myasset valueForProperty:ALAssetPropertyDate];
+    [self updateDateFieldFromDate:self.photoDate];
+    
+    // obtain the location property from the asset
+        _photoLocation = asset.location;//[myasset valueForProperty:ALAssetPropertyLocation];
+    
+    // then change location label
+    [self updateLocationNameFromLocation:self.photoLocation];
+    
+    self.navigationItem.rightBarButtonItem.enabled = [self doneButtonAllowed];
     _photoPickerDismissed = YES;
     
     [self dismissViewControllerAnimated:YES completion:^{
@@ -550,7 +566,7 @@ static const CGSize kImageSize = {512, 512};    // the size we want for the stor
                 CLPlacemark *placemark = placemarks[0];
                 if (placemark.locality != nil && placemark.administrativeArea != nil)
                 {
-                    self.locationLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.thoroughfare, placemark.locality, placemark.administrativeArea];
+                    self.locationLabel.text = [NSString stringWithFormat:@"%@, %@, %@", placemark.subLocality, placemark.locality, placemark.administrativeArea];
                 }
             }
         }];

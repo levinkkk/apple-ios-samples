@@ -350,7 +350,13 @@ enum ScopeIndexes {
                         
                         // update our table
                         NSInteger newIndexForPhoto = [self indexForPhotoWithRecordID:recordID];
-                        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newIndexForPhoto inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        if (self.records.count<=1) {
+                            
+                            [self.tableView reloadData];
+                        } else {
+                            
+                            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newIndexForPhoto inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        }
                     }
                 }
                 

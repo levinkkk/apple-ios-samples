@@ -26,6 +26,8 @@
 		53A9D1AC19D2123800AFB6CF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A9D1AB19D2123800AFB6CF /* CoreGraphics.framework */; };
 		53DEBD4B1B41D15300630F0A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DEBD4A1B41D15300630F0A /* CloudKit.framework */; };
 		53F77EF31B73B72D00961825 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F77EF11B73B72D00961825 /* LaunchScreen.xib */; };
+		BA6A714122D58A2600F23828 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA6A714022D58A2600F23828 /* Photos.framework */; };
+		BA6A714322D592F500F23828 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA6A714222D592F500F23828 /* UserNotifications.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,8 @@
 		53A9D1AB19D2123800AFB6CF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		53DEBD4A1B41D15300630F0A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		53F77EF21B73B72D00961825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = CloudPhotos/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		BA6A714022D58A2600F23828 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		BA6A714222D592F500F23828 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA6A714322D592F500F23828 /* UserNotifications.framework in Frameworks */,
+				BA6A714122D58A2600F23828 /* Photos.framework in Frameworks */,
 				5351CA561A927D3D000D5075 /* MapKit.framework in Frameworks */,
 				5351CA541A927ADC000D5075 /* AssetsLibrary.framework in Frameworks */,
 				53A9D1AC19D2123800AFB6CF /* CoreGraphics.framework in Frameworks */,
@@ -114,6 +120,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BA6A714222D592F500F23828 /* UserNotifications.framework */,
+				BA6A714022D58A2600F23828 /* Photos.framework */,
 				53DEBD4A1B41D15300630F0A /* CloudKit.framework */,
 				5351CA551A927D3D000D5075 /* MapKit.framework */,
 				5351CA531A927ADC000D5075 /* AssetsLibrary.framework */,
@@ -175,8 +183,13 @@
 				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
+						DevelopmentTeam = 6Q2DW7NG4V;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
 								enabled = 1;
 							};
 							com.apple.iCloud = {
@@ -293,17 +306,20 @@
 				CODE_SIGN_ENTITLEMENTS = CloudPhotos/CloudPhotos.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6Q2DW7NG4V;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudPhotos/Prefix.pch;
 				INFOPLIST_FILE = CloudPhotos/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.cloudphotos";
+				PRODUCT_BUNDLE_IDENTIFIER = com.levin.recordlive;
 				PRODUCT_NAME = CloudPhotos;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = recordlive_dev;
 			};
 			name = Debug;
 		};
@@ -317,15 +333,18 @@
 				CODE_SIGN_ENTITLEMENTS = CloudPhotos/CloudPhotos.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudPhotos/Prefix.pch;
 				INFOPLIST_FILE = CloudPhotos/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.cloudphotos";
+				PRODUCT_BUNDLE_IDENTIFIER = com.levin.recordlive;
 				PRODUCT_NAME = CloudPhotos;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

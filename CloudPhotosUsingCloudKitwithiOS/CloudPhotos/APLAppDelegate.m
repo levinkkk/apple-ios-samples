@@ -9,7 +9,9 @@
 #import "APLAppDelegate.h"
 #import "APLMainTableViewController.h"
 #import "APLCloudManager.h"
-
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+#import <UserNotifications/UserNotifications.h>
+#endif
 @implementation APLAppDelegate
 
 // The app delegate must implement the window @property
@@ -321,7 +323,14 @@
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
-
+//  iOS 10: 点击通知进入App时触发
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+    
+ 
+    [self handlePush:response.notification.request.content.userInfo];
+    
+    completionHandler();
+}
 #pragma mark - UIStateRestoration
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder
