@@ -7,7 +7,7 @@
  */
 
 @import CloudKit;
-
+#import "CommonFunction.h"
 #import "APLCloudManager.h"
 
 NSString * const kPhotoRecordType = @"PhotoRecord";     // our CKRecord type
@@ -51,7 +51,7 @@ void CloudKitErrorLog(int lineNumber, NSString *functionName, NSError *error)
 @property (readonly) CKContainer *container;
 @property (readonly) CKDatabase *publicDatabase;
 
-@property (readonly) CKDiscoveredUserInfo *userInfo;    // the current login user's information (first and last name)
+@property (readonly) CKUserIdentity *userInfo;    // the current login user's information (first and last name)
 
 @property (NS_NONATOMIC_IOSONLY, readonly, getter=isSubscribed) BOOL subscribed;
 
@@ -78,12 +78,17 @@ void CloudKitErrorLog(int lineNumber, NSString *functionName, NSError *error)
     {
         _container = [CKContainer defaultContainer];
         _publicDatabase = [_container publicCloudDatabase];
+      
     }
     return self;
 }
 
 - (BOOL)isContainerAvailable
 {
+    if (true) {
+        
+        [CommonFunction showMessge:[NSString stringWithFormat:@"isContainerAvailable-%@ --%@",self.container, self.publicDatabase]];
+    }
     return (self.container != nil && self.publicDatabase != nil);
 }
 
@@ -760,6 +765,142 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
 {
     [self markNotificationsAsAlreadyRead:self.serverChangeToken];
 }
+- (void)markNotificationsAsAlreadyReadWithType:(CKNotificationType)type
+{
+//    [self markNotificationsAsAlreadyRead:self.serverChangeToken withType:(CKNotificationType)type];
+}
+- (void)markNotificationsAsAlreadyReadWithCKNotification:(CKNotification*) notification{
+    if ([notification isKindOfClass:[CKRecordZoneNotification class]]) {
+        CKRecordZoneNotification *zoneNotification=(CKRecordZoneNotification*)notification;
+        CKRecordZoneID *recordZoneID=zoneNotification.recordZoneID;
+        [self markNotificationsAsAlreadyReadWithRecordZoneID:recordZoneID andServerChangeToken:self.serverChangeToken];
+    } else {
+        
+    }
+}
+- (void)markNotificationsAsAlreadyReadWithRecordZoneID:(CKRecordZoneID *)recordZoneID andServerChangeToken:(CKServerChangeToken *)serverChangeToken
+{
+        // each item in the notification queue need to be marked as "read" so next time we won't be concerned about them
+        //
+        __block NSMutableArray *array = [NSMutableArray array];
+        
+        // this operation will fetch all notification changes,
+        // if a change anchor from a previous CKFetchNotificationChangesOperation is passed in,
+        // only the notifications that have changed since that anchor will be fetched.
+        //
+//    CKFetchRecordZoneChangesConfiguration *configuration=[[CKFetchRecordZoneChangesConfiguration alloc] init];
+//    configuration.resultsLimit=kResultsLimit;
+//    configuration.previousServerChangeToken=serverChangeToken;
+    CKFetchRecordZoneChangesOptions *option=[[CKFetchRecordZoneChangesOptions alloc] init];
+    option.resultsLimit=kResultsLimit;
+    option.previousServerChangeToken=serverChangeToken;
+    
+    CKFetchRecordZoneChangesOperation *fetchChangesOperation =
+        [[CKFetchRecordZoneChangesOperation alloc] initWithRecordZoneIDs:@[recordZoneID
+                                                                           ] optionsByRecordZoneID:@{recordZoneID:option}];
+//        fetchChangesOperation.resultsLimit=kResultsLimit;
+    __weak CKFetchRecordZoneChangesOperation *weakFetchChangesOperation = fetchChangesOperation;
+    fetchChangesOperation.fetchRecordZoneChangesCompletionBlock = ^(NSError * _Nullable operationError) {
+        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
+    };
+    fetchChangesOperation.recordZoneFetchCompletionBlock = ^(CKRecordZoneID * _Nonnull recordZoneID, CKServerChangeToken * _Nullable serverChangeToken, NSData * _Nullable clientChangeTokenData, BOOL moreComing, NSError * _Nullable recordZoneError) {
+        if (moreComing)
+        {
+            [self markNotificationsAsAlreadyReadWithRecordZoneID:recordZoneID andServerChangeToken:serverChangeToken];
+        }
+        else
+        {
+            _serverChangeToken = serverChangeToken;
+        }
+    };
+    fetchChangesOperation.recordChangedBlock = ^(CKRecord * _Nonnull record) {
+        NSLog(@"recordChangedBlock");
+    };
+    fetchChangesOperation.completionBlock = ^{
+        //NSLog(@"found %lu items in the change notif queue", (unsigned long)array.count);
+        
+        NSLog(@"completionBlock");
+        // mark all of them as "read"
+        /*
+        CKMarkNotificationsReadOperation *markNotifsReadOperation = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:array];
+        
+        markNotifsReadOperation.markNotificationsReadCompletionBlock = ^ (NSArray *notificationIDsMarkedRead, NSError *operationError) {
+            if (operationError != nil)
+            {
+                CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
+                
+                //NSLog(@"Unable to mark notifs as read: %@", operationError);
+            }
+            else
+            {
+                // finished marking the notifications as "read"
+                //NSLog(@"items marked as read = %lu", (unsigned long)notificationIDsMarkedRead.count);
+            }
+        };
+        
+        [self.container addOperation:markNotifsReadOperation];
+         */
+    };
+    
+    ////////
+    /*
+    fetchChangesOperation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *newerServerChangeToken, NSError *operationError) {
+            if (operationError != nil)
+            {
+                CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
+            }
+            else
+            {
+                // If "moreComing" is set then the server wasn't able to return all the changes in this response,
+                // another CKFetchNotificationChangesOperation operation should be run with the updated serverChangeToken token from this operation.
+                //
+                if (weakFetchChangesOperation.moreComing)
+                {
+                    [self markNotificationsAsAlreadyRead:newerServerChangeToken];
+                }
+                else
+                {
+                    _serverChangeToken = newerServerChangeToken;
+                }
+            }
+        };
+        
+        // this block processes a single push notification
+        fetchChangesOperation.notificationChangedBlock = ^(CKNotification *notification) {
+            if (notification.notificationType != CKNotificationTypeReadNotification)
+            {
+                [array addObject:notification.notificationID];  // add it to our array so that it can be marked as read
+            }
+        };
+        
+        // this block is executed after all requested notifications are fetched
+        fetchChangesOperation.completionBlock = ^{
+            //NSLog(@"found %lu items in the change notif queue", (unsigned long)array.count);
+            
+            // mark all of them as "read"
+            CKMarkNotificationsReadOperation *markNotifsReadOperation = [[CKMarkNotificationsReadOperation alloc] initWithNotificationIDsToMarkRead:array];
+            
+            markNotifsReadOperation.markNotificationsReadCompletionBlock = ^ (NSArray *notificationIDsMarkedRead, NSError *operationError) {
+                if (operationError != nil)
+                {
+                    CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
+                    
+                    //NSLog(@"Unable to mark notifs as read: %@", operationError);
+                }
+                else
+                {
+                    // finished marking the notifications as "read"
+                    //NSLog(@"items marked as read = %lu", (unsigned long)notificationIDsMarkedRead.count);
+                }
+            };
+            
+            [self.container addOperation:markNotifsReadOperation];
+        };
+    */
+    
+        [self.container addOperation:fetchChangesOperation];
+    
+}
 
 - (void)markNotificationsAsAlreadyRead:(CKServerChangeToken *)serverChangeToken
 {
@@ -773,7 +914,7 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
     //
     CKFetchNotificationChangesOperation *fetchChangesOperation =
         [[CKFetchNotificationChangesOperation alloc] initWithPreviousServerChangeToken:serverChangeToken];
-    
+    fetchChangesOperation.resultsLimit=kResultsLimit;
     __weak CKFetchNotificationChangesOperation *weakFetchChangesOperation = fetchChangesOperation;
     
     fetchChangesOperation.fetchNotificationChangesCompletionBlock = ^ (CKServerChangeToken *newerServerChangeToken, NSError *operationError) {
@@ -837,6 +978,10 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
 
 - (BOOL)userLoginIsValid
 {
+    if (true) {
+        
+        [CommonFunction showMessge:[NSString stringWithFormat:@"userLoginIsValid-%@",self.userRecordID]];
+    }
     return (self.userRecordID != nil);
 }
 
@@ -846,7 +991,10 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
     [[CKContainer defaultContainer] accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
     
         CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
-        
+        if (error) {
+            
+            [CommonFunction showMessge:[NSString stringWithFormat:@"accountAvailable:(void (^)(BOOL available))completionHandler-%@",error.description]];
+        }
         // back on the main queue, call our completion handler
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             
@@ -869,16 +1017,51 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
 //
 - (void)requestDiscoverabilityPermission:(void (^)(BOOL discoverable)) completionHandler {
     
-    [self.container requestApplicationPermission:CKApplicationPermissionUserDiscoverability
-                               completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
-
-        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
-                                   
-        // back on the main queue, call our completion handler
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionHandler(applicationPermissionStatus == CKApplicationPermissionStatusGranted);
-        });
-    }];
+    
+//    [self.container accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError * _Nullable error) {
+//        if (accountStatus == CKAccountStatusAvailable) {
+            [self.container statusForApplicationPermission:CKApplicationPermissionUserDiscoverability completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError * _Nullable error) {
+                if (applicationPermissionStatus==CKApplicationPermissionStatusInitialState || applicationPermissionStatus==CKApplicationPermissionStatusGranted) {
+                    [self.container requestApplicationPermission:CKApplicationPermissionUserDiscoverability completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError * _Nullable error) {
+                        
+                        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
+                        
+//                        [CommonFunction showMessge:[NSString stringWithFormat:@"requestDiscoverabilityPermission:(void (^)(BOOL discoverable)) completionHandler  =%@ status=%ld",error.description,applicationPermissionStatus] ];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completionHandler(applicationPermissionStatus == CKApplicationPermissionStatusGranted);
+                        });
+                        if (applicationPermissionStatus == CKApplicationPermissionStatusGranted) {
+//                            [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID * _Nullable recordID, NSError * _Nullable error) {
+//                                if (!error && recordID) {
+//                                    [self.container discoverUserIdentityWithUserRecordID:recordID completionHandler:^(CKUserIdentity * _Nullable userInfo, NSError * _Nullable error) {
+//                                        NSLog(@"UserInfo: %@  Error: %@", userInfo, error);
+//                                    }];
+//                                }
+//                                else{
+//
+//                                }
+//                            }];
+                        }
+                    }];
+                }
+                else{
+                    NSLog(@"请在’设置‘->'iCloud'底部的'找到我'中允许应用使用此功能！");
+                }
+            }];
+//        }
+//    }];
+//    [self.container requestApplicationPermission:CKApplicationPermissionUserDiscoverability
+//                               completionHandler:^(CKApplicationPermissionStatus applicationPermissionStatus, NSError *error) {
+//
+//        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
+//
+//                                       [CommonFunction showMessge:[NSString stringWithFormat:@"requestDiscoverabilityPermission:(void (^)(BOOL discoverable)) completionHandler  =%@ status=%ld",error.description,applicationPermissionStatus] ];
+//
+//        // back on the main queue, call our completion handler
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            completionHandler(applicationPermissionStatus == CKApplicationPermissionStatusGranted);
+//        });
+//    }];
 }
 
 // obtain information on all users in our Address Book
@@ -1039,7 +1222,9 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
             // first obtain the CKRecordID of the logged in user (we use it to find the user's contact info)
             //
             [self.container fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
-                
+                if (error) {
+                    [CommonFunction showMessge:[NSString stringWithFormat:@"updateUserLogin:(void (^)(void))completionHandler =%@",error.description] ];
+                }
                 if (error != nil)
                 {
                     // no user information will be known at this time
@@ -1058,7 +1243,10 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
                     _userRecordID = recordID;
                     
                     // retrieve info about the logged in user using it's CKRecordID
-                    [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *user, NSError *error) {
+                    [self.container discoverUserIdentityWithUserRecordID:recordID completionHandler:^(CKUserIdentity * _Nullable userInfo, NSError * _Nullable error) {
+                        if (error) {
+                            [CommonFunction showMessge:[NSString stringWithFormat:@"updateUserLogin:discoverUserInfoWithUserRecordID =%@",error.description] ];
+                        }
                         if (error != nil)
                         {
                             // if we get network failure error (4), we still get back a recordID, which means no access to CloudKit container
@@ -1071,7 +1259,7 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
                         }
                         else
                         {
-                            _userInfo = user;
+                            _userInfo = userInfo;
                             //NSLog(@"logged in as '%@ %@'", self.userInfo.firstName, self.userInfo.lastName);
                         }
                         
@@ -1080,6 +1268,31 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
                             completionHandler();    // invoke our caller's completion handler indicating we are done
                         });
                     }];
+//                    [self.container discoverUserInfoWithUserRecordID:recordID completionHandler:^(CKDiscoveredUserInfo *user, NSError *error) {
+//                        if (error) {
+//                            [CommonFunction showMessge:[NSString stringWithFormat:@"updateUserLogin:discoverUserInfoWithUserRecordID =%@",error.description] ];
+//                        }
+//                        if (error != nil)
+//                        {
+//                            // if we get network failure error (4), we still get back a recordID, which means no access to CloudKit container
+//
+//                            // no user information will be known at this time
+//                            _userRecordID = nil;
+//                            _userInfo = nil;
+//
+//                            CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
+//                        }
+//                        else
+//                        {
+//                            _userInfo = user;
+//                            //NSLog(@"logged in as '%@ %@'", self.userInfo.firstName, self.userInfo.lastName);
+//                        }
+//
+//                        // back on the main queue, call our completion handler
+//                        dispatch_async(dispatch_get_main_queue(), ^(void) {
+//                            completionHandler();    // invoke our caller's completion handler indicating we are done
+//                        });
+//                    }];
                 }
             }];
         }

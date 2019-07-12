@@ -58,5 +58,7 @@
 - (void)unsubscribe;
 - (void)forceUnsubscribe;
 - (void)markNotificationsAsAlreadyRead;
+- (void)markNotificationsAsAlreadyReadWithType:(CKNotificationType) type;
+- (void)markNotificationsAsAlreadyReadWithCKNotification:(CKNotification*) notification;
 
 @end

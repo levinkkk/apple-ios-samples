@@ -42,5 +42,9 @@
 	<string>APP需要获取您的相册的相片进行头像、故事、日志、相关证书编辑上传。</string>
 	<key>NSCameraUsageDescription</key>
 	<string>APP需要获取您的照相机的相片进行头像、故事、日志、相关证书编辑上传。</string>
+	<key>NSContactsUsageDescription</key>
+	<string>获取联系人记录</string>
+	<key>NSSiriUsageDescription</key>
+	<string>Siri 获取</string>
 </dict>
 </plist>

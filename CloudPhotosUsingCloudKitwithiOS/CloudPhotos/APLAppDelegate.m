@@ -171,8 +171,17 @@
 
 - (void)handlePush:(NSDictionary *)userInfo
 {
-    [CloudManager markNotificationsAsAlreadyRead];
+    CKNotification *cloudKitNotification = [CKNotification notificationFromRemoteNotificationDictionary:userInfo];
+    CKNotificationType notifType = [cloudKitNotification notificationType];
     
+    // for debugging:
+    CKNotificationID *notificationID = [cloudKitNotification notificationID];
+    NSString *containerIdentifier = [cloudKitNotification containerIdentifier];
+    NSLog(@"CloudPhotos: Push notification received: %@", [cloudKitNotification alertBody]);
+    NSLog(@"notifType = %ld, notifID = %@, containerID = %@", (long)notifType, notificationID, containerIdentifier);
+    
+    
+//    [CloudManager markNotificationsAsAlreadyRead];
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
     {
         //NSLog(@"incoming push notification: app is active");
@@ -182,17 +191,12 @@
         //NSLog(@"incoming push notification: app is the background");
     }
     
-    CKNotification *cloudKitNotification = [CKNotification notificationFromRemoteNotificationDictionary:userInfo];
-    CKNotificationType notifType = [cloudKitNotification notificationType];
     
-    // for debugging:
-    //CKNotificationID *notificationID = [cloudKitNotification notificationID];
-    //NSString *containerIdentifier = [cloudKitNotification containerIdentifier];
-    //NSLog(@"CloudPhotos: Push notification received: %@", [cloudKitNotification alertBody]);
-    //NSLog(@"notifType = %ld, notifID = %@, containerID = %@", (long)notifType, notificationID, containerIdentifier);
-    
+
     if (notifType == CKNotificationTypeQuery)
     {
+        
+        [CloudManager markNotificationsAsAlreadyRead];
         // a notification generated based on the conditions set forth in a subscription object (NSPredicate, in our case a "true" predicate)
         CKQueryNotification *queryNotification = (CKQueryNotification *)[CKNotification notificationFromRemoteNotificationDictionary:userInfo];
         
@@ -273,6 +277,11 @@
         
         // for debugging, just for fun - attempt to find the owner of that recordID from this notification
         [self reportUserFromNotification:queryNotification];
+    }
+    else if (notifType == CKNotificationTypeRecordZone){
+        CKRecordZoneNotification *queryNotification = (CKRecordZoneNotification *)[CKNotification notificationFromRemoteNotificationDictionary:userInfo];
+        
+        [CloudManager markNotificationsAsAlreadyReadWithCKNotification:queryNotification];
     }
 }
 

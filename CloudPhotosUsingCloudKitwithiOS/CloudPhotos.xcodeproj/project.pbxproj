@@ -28,6 +28,7 @@
 		53F77EF31B73B72D00961825 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F77EF11B73B72D00961825 /* LaunchScreen.xib */; };
 		BA6A714122D58A2600F23828 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA6A714022D58A2600F23828 /* Photos.framework */; };
 		BA6A714322D592F500F23828 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA6A714222D592F500F23828 /* UserNotifications.framework */; };
+		BAE7A9D222D865E300E104F9 /* CommonFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE7A9D022D865E200E104F9 /* CommonFunction.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,8 @@
 		53F77EF21B73B72D00961825 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = CloudPhotos/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		BA6A714022D58A2600F23828 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		BA6A714222D592F500F23828 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		BAE7A9D022D865E200E104F9 /* CommonFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommonFunction.m; path = CloudPhotos/CommonFunction.m; sourceTree = "<group>"; };
+		BAE7A9D122D865E300E104F9 /* CommonFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonFunction.h; path = CloudPhotos/CommonFunction.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 		53AF8AEC0D9C50B700726DBA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				BAE7A9D122D865E300E104F9 /* CommonFunction.h */,
+				BAE7A9D022D865E200E104F9 /* CommonFunction.m */,
 				538E11EB1A9FBFA700271F31 /* Prefix.pch */,
 				538E11EA1A9FBFA700271F31 /* main.m */,
 				538E11E01A9FBFA700271F31 /* APLAppDelegate.h */,
@@ -258,6 +263,7 @@
 			files = (
 				538E11F01A9FBFA700271F31 /* APLMainTableViewController.m in Sources */,
 				538E11ED1A9FBFA700271F31 /* APLAppDelegate.m in Sources */,
+				BAE7A9D222D865E300E104F9 /* CommonFunction.m in Sources */,
 				537FA3F11AA77B7400B0C79A /* APLCloudManager.m in Sources */,
 				53A7E8671B0D027000D5D61D /* APLPhotoViewController.m in Sources */,
 				532D56B71AB8A5CB00D33391 /* APLMapViewController.m in Sources */,
@@ -320,6 +326,7 @@
 				PRODUCT_NAME = CloudPhotos;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = recordlive_dev;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -331,12 +338,12 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = CloudPhotos/CloudPhotos.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6Q2DW7NG4V;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = CloudPhotos/Prefix.pch;
 				INFOPLIST_FILE = CloudPhotos/Info.plist;
@@ -344,7 +351,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.levin.recordlive;
 				PRODUCT_NAME = CloudPhotos;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = recordlive_adhoc;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

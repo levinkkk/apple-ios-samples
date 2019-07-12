@@ -10,7 +10,8 @@
 #import "APLMainTableViewController.h"
 #import "APLDetailTableViewController.h"
 #import "APLCloudManager.h"
-
+#import "CommonFunction.h"
+//#import "MJRefresh.h"
 @import CloudKit;
 @import CoreLocation;   // for tracking user's location and CLGeocoder
 
@@ -102,7 +103,12 @@ enum ScopeIndexes {
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] initWithFrame:CGRectZero];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
-    
+//    self.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingBlock:^{
+//        [self refresh:nil];
+//    }];
+//    self.tableView.mj_footer=[MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+//        [self refresh:nil];
+//    }];
     // while in table edit mode, we allow for "Delete My Photos" feature in the bottom toolbar
     UIBarButtonItem *clearAllButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Delete My Photos", nil)
                                                                        style:UIBarButtonItemStylePlain
@@ -138,7 +144,20 @@ enum ScopeIndexes {
         }];
     }];
 }
-
+/**
+ * 更新视图.
+ */
+- (void) updateView
+{
+    [self.tableView reloadData];
+}
+/**
+ *  停止刷新
+ */
+-(void)endRefresh{
+//    [self.tableView.mj_header endRefreshing];
+//    [self.tableView.mj_footer endRefreshing];
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -205,7 +224,10 @@ enum ScopeIndexes {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     [CloudManager accountAvailable:^(BOOL available) {
-        
+//        if (!available) {
+//            
+//            [CommonFunction showMessge:[NSString stringWithFormat:@"updateNavigationBar-available=NO"]];
+//        }
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         
         if (available && [CloudManager userLoginIsValid])
