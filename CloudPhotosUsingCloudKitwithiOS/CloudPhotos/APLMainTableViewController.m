@@ -239,6 +239,9 @@ enum ScopeIndexes {
             
             // add button state should match if we have a container to read/write to
             self.addButton.enabled = [CloudManager isContainerAvailable];
+            [CloudManager fetchAllUsers:^(NSArray *userRecords) {
+                NSLog(@"%@" ,userRecords);
+            }];
         }
         else
         {

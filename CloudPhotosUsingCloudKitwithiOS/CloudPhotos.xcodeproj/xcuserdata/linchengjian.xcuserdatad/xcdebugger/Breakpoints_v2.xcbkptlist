@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLMainTableViewController.m"
-            timestampString = "584611336.193156"
+            timestampString = "584614541.595122"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "359"
-            endingLineNumber = "359"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
             landmarkName = "-updateTableWithRecordID:reason:"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLMainTableViewController.m"
-            timestampString = "584611336.193215"
+            timestampString = "584614541.595452"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
             landmarkName = "-updateTableWithRecordID:reason:"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLMainTableViewController.m"
-            timestampString = "584611336.193342"
+            timestampString = "584614541.595764"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "802"
-            endingLineNumber = "802"
+            startingLineNumber = "805"
+            endingLineNumber = "805"
             landmarkName = "-configureCell:forRecord:"
             landmarkType = "7">
          </BreakpointContent>
@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLCloudManager.m"
-            timestampString = "584611336.193408"
+            timestampString = "584614541.595999"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "353"
@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLCloudManager.m"
-            timestampString = "584611336.193749"
+            timestampString = "584614541.596046"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1117"
-            endingLineNumber = "1117"
+            startingLineNumber = "1130"
+            endingLineNumber = "1130"
             landmarkName = "-fetchLoggedInUserRecord:"
             landmarkType = "7">
          </BreakpointContent>
@@ -186,61 +186,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLCloudManager.m"
-            timestampString = "584611336.194021"
+            timestampString = "584614541.596086"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1125"
-            endingLineNumber = "1125"
+            startingLineNumber = "1138"
+            endingLineNumber = "1138"
             landmarkName = "-fetchLoggedInUserRecord:"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudPhotos/APLDetailTableViewController.m"
-            timestampString = "584436146.286791"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
-            landmarkName = "-setupTableElements"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[APLDetailTableViewController setupTableElements]"
-                  moduleName = "CloudPhotos"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/linchengjian/apple-ios-samples/CloudPhotosUsingCloudKitwithiOS/CloudPhotos/APLDetailTableViewController.m"
-                  timestampString = "584611336.5767159"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "157"
-                  endingLineNumber = "157"
-                  offsetFromSymbolStart = "820">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__50-[APLDetailTableViewController setupTableElements]_block_invoke"
-                  moduleName = "CloudPhotos"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/linchengjian/apple-ios-samples/CloudPhotosUsingCloudKitwithiOS/CloudPhotos/APLDetailTableViewController.m"
-                  timestampString = "584611336.578191"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "84">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -250,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLMainTableViewController.m"
-            timestampString = "584611336.194308"
+            timestampString = "584614541.5961241"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "799"
-            endingLineNumber = "799"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
             landmarkName = "@implementation APLMainTableViewController"
             landmarkType = "3">
             <Locations>
@@ -330,7 +282,7 @@
                   moduleName = "CloudPhotos"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linchengjian/apple-ios-samples/CloudPhotosUsingCloudKitwithiOS/CloudPhotos/APLDetailTableViewController.m"
-                  timestampString = "584611336.58512"
+                  timestampString = "584614541.790117"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "563"
@@ -345,7 +297,7 @@
                   moduleName = "CloudPhotos"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linchengjian/apple-ios-samples/CloudPhotosUsingCloudKitwithiOS/CloudPhotos/APLDetailTableViewController.m"
-                  timestampString = "584611336.58645"
+                  timestampString = "584614541.7916009"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "564"
@@ -394,7 +346,7 @@
                   moduleName = "CloudPhotos"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linchengjian/apple-ios-samples/CloudPhotosUsingCloudKitwithiOS/CloudPhotos/APLAppDelegate.m"
-                  timestampString = "584611336.592903"
+                  timestampString = "584614541.798315"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "100"
@@ -409,7 +361,7 @@
                   moduleName = "CloudPhotos"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/linchengjian/apple-ios-samples/CloudPhotosUsingCloudKitwithiOS/CloudPhotos/APLAppDelegate.m"
-                  timestampString = "584611336.594384"
+                  timestampString = "584614541.799704"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "100"
@@ -474,7 +426,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLCloudManager.m"
-            timestampString = "584611336.194491"
+            timestampString = "584614541.596491"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "626"
@@ -490,7 +442,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLCloudManager.m"
-            timestampString = "584611336.194798"
+            timestampString = "584614541.596535"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "807"
@@ -522,12 +474,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CloudPhotos/APLCloudManager.m"
-            timestampString = "584611336.195101"
+            timestampString = "584614541.596596"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1024"
-            endingLineNumber = "1024"
-            landmarkName = "-requestDiscoverabilityPermission:"
+            startingLineNumber = "1084"
+            endingLineNumber = "1084"
+            landmarkName = "-fetchAllUsers:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudPhotos/APLCloudManager.m"
+            timestampString = "584614541.5966361"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1088"
+            endingLineNumber = "1088"
+            landmarkName = "-fetchAllUsers:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CloudPhotos/APLMainTableViewController.m"
+            timestampString = "584614541.596675"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
+            landmarkName = "-updateNavigationBar"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

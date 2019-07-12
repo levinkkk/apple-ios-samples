@@ -1073,24 +1073,37 @@ static NSString * const kSubscriptionIDKey = @"subscriptionID";
 {
     // find all discoverable users in the device's address book
     //
-    
-    CKDiscoverAllContactsOperation *op = [[CKDiscoverAllContactsOperation alloc] init];
+    __block NSMutableArray *userInfos = [NSMutableArray array];
+    CKDiscoverAllUserIdentitiesOperation *op = [[CKDiscoverAllUserIdentitiesOperation alloc] init];
     op.queuePriority = NSOperationQueuePriorityNormal;
-//    op.discoverAllUserIdentitiesCompletionBlock = ^(NSError * _Nullable operationError) {
-//        
-//    };
-//    op.userIdentityDiscoveredBlock = ^(CKUserIdentity * _Nonnull identity) {
-//        
-//    };
-    [op setDiscoverAllContactsCompletionBlock:^(NSArray *userInfos, NSError *error) {
-        
-        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
+    op.discoverAllUserIdentitiesCompletionBlock = ^(NSError * _Nullable operationError) {
+        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), operationError);
         
         // back on the main queue, call our completion handler
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             completionHandler(userInfos);
         });
-    }];
+    };
+    op.userIdentityDiscoveredBlock = ^(CKUserIdentity * _Nonnull identity) {
+        [userInfos addObject:identity];
+    };
+//    CKDiscoverAllContactsOperation *op = [[CKDiscoverAllContactsOperation alloc] init];
+//    op.queuePriority = NSOperationQueuePriorityNormal;
+////    op.discoverAllUserIdentitiesCompletionBlock = ^(NSError * _Nullable operationError) {
+////
+////    };
+////    op.userIdentityDiscoveredBlock = ^(CKUserIdentity * _Nonnull identity) {
+////
+////    };
+//    [op setDiscoverAllContactsCompletionBlock:^(NSArray *userInfos, NSError *error) {
+//
+//        CloudKitErrorLog(__LINE__, NSStringFromSelector(_cmd), error);
+//
+//        // back on the main queue, call our completion handler
+//        dispatch_async(dispatch_get_main_queue(), ^(void) {
+//            completionHandler(userInfos);
+//        });
+//    }];
     [self.container addOperation:op];
     
     // or directly without NSOperation
